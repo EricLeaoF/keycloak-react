@@ -1,0 +1,73 @@
+version: "2.3"
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - frontend
+      - keycloak
+
+  frontend:
+    image: node:20
+    working_dir: /app
+    command: bash -c "npm install && npm run dev"
+    volumes:
+      - .:/app:z
+    container_name: frontend
+    ports:
+      - "8080:8080"
+    environment:
+      - CLIENT_ID=frontend
+      - KC_GATEWAY=http://frontend/auth
+      - MULTITENANCY=true
+      - REALM=firstrealm
+
+  db-keycloak:
+    container_name: db-keycloak
+    image: mysql:8.0.28
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_PASSWORD=root
+      - MYSQL_TCP_PORT=3308
+    ports:
+      - "3308:3308"
+    security_opt:
+      - seccomp:unconfined
+    # volumes:
+    #   - ./docker/db/mysql:/var/lib/mysql
+    healthcheck:
+      test: "mysql $$MYSQL_DATABASE -u$$MYSQL_ROOT_USER -p$$MYSQL_ROOT_PASSWORD -e 'SELECT 1;'"
+      timeout: 3s
+      retries: 3
+
+
+  keycloak:
+    container_name: keycloak
+    image: quay.io/keycloak/keycloak:21.0.1
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_DB=mysql
+      - KC_DB_USERNAME=root
+      - KC_DB_PASSWORD=root
+      - KC_DB_URL_HOST=db-keycloak
+      - KC_DB_URL_PORT=3308
+      - KC_DB_SCHEMA=keycloak
+      - KC_HTTP_RELATIVE_PATH=/auth
+      # - KC_HTTPS_CLIENT_AUTH=required
+      - KC_HOSTNAME_ADMIN_URL=http://frontend/auth
+      - KC_HOSTNAME_URL=http://frontend/auth
+
+    ports:
+      - "8081:8080"
+    command: start-dev
+    depends_on:
+      - db-keycloak
+
+
+
