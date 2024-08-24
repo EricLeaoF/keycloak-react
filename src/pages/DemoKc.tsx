@@ -16,17 +16,10 @@ const DemoKc = () => {
     httpClient.get('https://mockbin.com/request');
   };
 
-  if (!kc) {
-    return <div></div>; // You might want to handle loading state better
-  }
+  if (!kc) return <div></div>;
 
   return (
     <div>
-      <div className='grid'>
-        <div className='col-12'>
-          <h1>My Secured React App</h1>
-        </div>
-      </div>
       <div className='grid'>
         <div className='col-1'></div>
         <div className='col-2'>

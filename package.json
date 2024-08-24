@@ -13,6 +13,7 @@
     "@heroicons/react": "^2.1.5",
     "autoprefixer": "^10.4.20",
     "axios": "^1.7.3",
+    "framer-motion": "^11.3.30",
     "keycloak-js": "^20.0.3",
     "postcss": "^8.4.41",
     "primeflex": "^3.3.1",
