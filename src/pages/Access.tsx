@@ -1,6 +1,6 @@
 const AccessPage = () => {
   return (
-    <div className='container'>
+    <div className=''>
       <h1> Página de Acessos </h1>
     </div>
   )

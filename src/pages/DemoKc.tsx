@@ -21,7 +21,7 @@ const DemoKc = () => {
   }
 
   return (
-    <div className="App">
+    <div>
       <div className='grid'>
         <div className='col-12'>
           <h1>My Secured React App</h1>
