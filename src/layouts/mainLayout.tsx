@@ -79,7 +79,7 @@ const Layout: React.FC = () => {
         </div>
       </header>
       <div className="flex flex-1 pt-16">
-        <aside className="bg-white p-4 w-48 fixed top-16 left-0 h-full overflow-y-auto">
+        <aside className="bg-white p-4 w-48 fixed top-16 left-0 h-full overflow-y-auto border-2">
           <nav className="flex flex-col space-y-8">
             <Link to="/" className="flex flex-col items-center space-x-2 text-gray-700 hover:text-gray-900">
               <HomeIcon className="h-6 w-6" />
@@ -95,7 +95,7 @@ const Layout: React.FC = () => {
             </Link>
           </nav>
         </aside>
-        <main className="flex-1 ml-48 p-4 mainPage overflow-auto">
+        <main className="bg-white flex-1 ml-48 p-4">
           <Outlet />
         </main>
       </div>
@@ -140,7 +140,7 @@ const Layout: React.FC = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
                   <input 
                     type="email" 
-                    value={kc.tokenParsed.email || ''} 
+                    value={kc.tokenParsed.email} 
                     className="border border-gray-300 p-2 rounded-md w-full"
                     readOnly 
                   />
