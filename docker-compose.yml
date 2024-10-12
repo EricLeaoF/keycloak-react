@@ -22,18 +22,20 @@ services:
       - "8080:8080"
     environment:
       - CLIENT_ID=frontend
-      - KC_GATEWAY=http://frontend/auth
-      - MULTITENANCY=true
+      - KEYCLOAK_URL=http://frontend/auth
       - REALM=firstrealm
 
   db-keycloak:
     container_name: db-keycloak
     image: mysql:8.0.28
+    entrypoint: ['/entrypoint.sh', '--default-authentication-plugin=mysql_native_password']
     restart: always
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_PASSWORD=root
       - MYSQL_TCP_PORT=3308
+      - MYSQL_ROOT_USER=root
+      - MYSQL_DATABASE=keycloak
     ports:
       - "3308:3308"
     security_opt:
@@ -67,7 +69,9 @@ services:
       - "8081:8080"
     command: start-dev
     depends_on:
-      - db-keycloak
+      db-keycloak: 
+        condition: service_healthy
+
 
 
 

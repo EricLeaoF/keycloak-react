@@ -14,9 +14,9 @@ const KeycloakProvider: React.FC<{ children: React.ReactNode }> = ({ children })
   useEffect(() => {
     const initKeycloak = async () => {
       const keycloak = new Keycloak({
-        url: 'http://frontend/auth',
-        realm: 'master',
-        clientId: 'react-client',
+        url: getEnvVar('KEYCLOAK_URL'),
+        realm: getEnvVar('REALM'),
+        clientId: getEnvVar('CLIENT_ID')
       });
 
       try {
@@ -48,6 +48,14 @@ const KeycloakProvider: React.FC<{ children: React.ReactNode }> = ({ children })
       {children}
     </KeycloakContext.Provider>
   );
+};
+
+const getEnvVar = (key: string): string => {
+  const value = process.env[key];
+  if (!value) {
+    throw new Error(`Missing environment variable: ${key}`);
+  }
+  return value;
 };
 
 const useKeycloak = () => {
