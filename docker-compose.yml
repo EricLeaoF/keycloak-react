@@ -25,17 +25,18 @@ services:
       - KEYCLOAK_URL=http://frontend/auth
       - REALM=firstrealm
 
-  backend:
-    build:
-      context: ../api
-      dockerfile: Dockerfile
-    ports:
-      - "3030:3030"
-    volumes:
-      - ../api:/app
-      - ../api/target:/app
-    environment:
-      - SPRING_PROFILES_ACTIVE=dev
+  # backend:
+  #   container_name: backend
+  #   build:
+  #     context: ../api
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "3030:3030"
+  #   volumes:
+  #     - ../api:/app
+  #     - ../api/target:/app
+  #   environment:
+  #     - SPRING_PROFILES_ACTIVE=dev
 
   db-keycloak:
     container_name: db-keycloak

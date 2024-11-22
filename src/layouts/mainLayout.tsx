@@ -40,7 +40,7 @@ const Layout: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col">
       <header className="fixed flex bg-gray-800 text-white p-4 w-full top-0 left-0 z-10">
         <div className="flex-1">
         </div>
@@ -95,7 +95,9 @@ const Layout: React.FC = () => {
             </Link>
           </nav>
         </aside>
-        <main className="bg-white flex-1 ml-48 p-4">
+      </div>
+      <div className="bg-gray-50">
+        <main className="flex-1 ml-48 p-4">
           <Outlet />
         </main>
       </div>
