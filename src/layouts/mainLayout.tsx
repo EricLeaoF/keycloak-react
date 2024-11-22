@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 const Layout: React.FC = () => {
   const { kc } = useKeycloak();
 
-  if (!kc || !kc.tokenParsed) {return <div></div>; }
+  if (!kc || !kc.tokenParsed) { return <div></div>; }
   const [showDropdown, setShowDropdown] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
   const [firstName, setFirstName] = useState(kc.tokenParsed.given_name || kc.tokenParsed.preferred_username || '');
@@ -40,10 +40,9 @@ const Layout: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col absolute w-full h-full overflow-x-hidden">
       <header className="fixed flex bg-gray-800 text-white p-4 w-full top-0 left-0 z-10">
-        <div className="flex-1">
-        </div>
+        <div className="flex-1"></div>
         <div className="flex items-center relative">
           <button 
             onClick={toggleDropdown} 
@@ -78,7 +77,7 @@ const Layout: React.FC = () => {
           )}
         </div>
       </header>
-      <div className="flex flex-1 pt-16">
+      <div className="flex flex-1 pt-16 max-w-full">
         <aside className="bg-white p-4 w-48 fixed top-16 left-0 h-full overflow-y-auto border-2">
           <nav className="flex flex-col space-y-8">
             <Link to="/" className="flex flex-col items-center space-x-2 text-gray-700 hover:text-gray-900">
@@ -96,8 +95,8 @@ const Layout: React.FC = () => {
           </nav>
         </aside>
       </div>
-      <div className="bg-gray-50">
-        <main className="flex-1 ml-48 p-4">
+      <div className="bg-slate-100 overflow-hidden">
+        <main className="flex-1 ml-48 p-4 h-screen max-w-full">
           <Outlet />
         </main>
       </div>
