@@ -40,8 +40,8 @@ const Layout: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col absolute w-full h-full overflow-x-hidden">
-      <header className="fixed flex bg-gray-800 text-white p-4 w-full top-0 left-0 z-10">
+    <div className="flex flex-col absolute w-full h-full">
+      <header className="flex bg-gray-800 text-white p-4 w-full left-0 sticky top-0 z-50">
         <div className="flex-1"></div>
         <div className="flex items-center relative">
           <button 
@@ -54,7 +54,7 @@ const Layout: React.FC = () => {
             </svg>
           </button>
           {showDropdown && (
-            <div className="absolute right-0 mt-40 w-48 bg-white text-gray-800 border border-gray-300 shadow-lg rounded-lg">
+            <div className="right-0 mt-40 w-48 bg-white text-gray-800 border border-gray-300 shadow-lg rounded-lg">
               <ul>
                 <li>
                   <button 
@@ -77,7 +77,7 @@ const Layout: React.FC = () => {
           )}
         </div>
       </header>
-      <div className="flex flex-1 pt-16 max-w-full">
+      <div className="flex flex-1 max-w-full">
         <aside className="bg-white p-4 w-48 fixed top-16 left-0 h-full overflow-y-auto border-2">
           <nav className="flex flex-col space-y-8">
             <Link to="/" className="flex flex-col items-center space-x-2 text-gray-700 hover:text-gray-900">
@@ -95,11 +95,9 @@ const Layout: React.FC = () => {
           </nav>
         </aside>
       </div>
-      <div className="bg-slate-100 overflow-hidden">
-        <main className="flex-1 ml-48 p-4 h-screen max-w-full">
-          <Outlet />
-        </main>
-      </div>
+      <main className="bg-slate-100 ml-48 p-4 h-screen max-w-full relative">
+        <Outlet />
+      </main>
 
       <AnimatePresence>
         {showDialog && (
