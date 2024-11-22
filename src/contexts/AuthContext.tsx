@@ -1,16 +1,17 @@
-// src/contexts/KeycloakContext.tsx
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import Keycloak from 'keycloak-js';
 import { httpClient } from '../HttpClient';
 
 interface KeycloakContextType {
-  kc: Keycloak.KeycloakInstance | null;
+  kc: Keycloak | null;
 }
 
 const KeycloakContext = createContext<KeycloakContextType | undefined>(undefined);
 
 const KeycloakProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [kc, setKc] = useState<Keycloak.KeycloakInstance | null>(null);
+  const [kc, setKc] = useState<Keycloak | null>(null);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const initKeycloak = async () => {
       const keycloak = new Keycloak({
@@ -28,10 +29,6 @@ const KeycloakProvider: React.FC<{ children: React.ReactNode }> = ({ children })
 
         if (auth) {
           setKc(keycloak);
-          // Set the token in the HTTP client
-          if (kc) {
-            httpClient.defaults.headers.common['Authorization'] = `Bearer ${kc.token}`;
-          }
         } else {
           window.location.reload();
         }
@@ -43,10 +40,17 @@ const KeycloakProvider: React.FC<{ children: React.ReactNode }> = ({ children })
     initKeycloak();
   }, []);
 
+  useEffect(() => {
+    if (kc) {
+      httpClient.defaults.headers.common['Authorization'] = `Bearer ${kc.token}`;
+      setLoading(false);
+    }
+  }, [kc]); // Este effect será disparado sempre que 'kc' mudar
+
   return (
-    <KeycloakContext.Provider value={{ kc }}>
-      {children}
-    </KeycloakContext.Provider>
+    <div>
+      { !loading ? <KeycloakContext.Provider value={{ kc }}> {children} </KeycloakContext.Provider> : ''}
+    </div>
   );
 };
 
