@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Outlet, Link, useNavigate } from 'react-router-dom';
-import { HomeIcon, UserIcon, CogIcon } from '@heroicons/react/24/outline';
+import { Outlet, Link } from 'react-router-dom';
 import { useKeycloak } from '../contexts/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Ripple } from 'primereact/ripple';
 
 const Layout: React.FC = () => {
   const { kc } = useKeycloak();
@@ -54,7 +54,7 @@ const Layout: React.FC = () => {
             </svg>
           </button>
           {showDropdown && (
-            <div className="right-0 mt-40 w-48 bg-white text-gray-800 border border-gray-300 shadow-lg rounded-lg">
+            <div className="right-0 mt-36 w-48 bg-white text-gray-800 border border-gray-300 shadow-lg rounded-lg absolute">
               <ul>
                 <li>
                   <button 
@@ -78,24 +78,46 @@ const Layout: React.FC = () => {
         </div>
       </header>
       <div className="flex flex-1 max-w-full">
-        <aside className="bg-white p-4 w-48 fixed top-16 left-0 h-full overflow-y-auto border-2">
-          <nav className="flex flex-col space-y-8">
-            <Link to="/" className="flex flex-col items-center space-x-2 text-gray-700 hover:text-gray-900">
-              <HomeIcon className="h-6 w-6" />
-              <span>Home</span>
-            </Link>
-            <Link to="/access" className="flex flex-col items-center space-x-2 text-gray-700 hover:text-gray-900">
-              <UserIcon className="h-6 w-6" />
-              <span>Acessos</span>
-            </Link>
-            <Link to="/demokc" className="flex flex-col items-center space-x-2 text-gray-700 hover:text-gray-900">
-              <CogIcon className="h-6 w-6" />
-              <span>Demo Keycloak</span>
-            </Link>
-          </nav>
+        <aside className="bg-white p-3 w-48 fixed top-16 left-0 h-full overflow-y-auto border-2">
+          <div className="overflow-y-auto">
+            <ul className="list-none m-0">
+              <li>
+                  <ul className="list-none p-0 m-0 overflow-hidden">
+                      <li>
+                        <Link to="/">
+                          <a className="p-ripple flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors w-full">
+                            <i className="pi pi-home mr-2"></i>
+                            <span className="font-medium">Dashboard</span>
+                            <Ripple />
+                          </a>
+                        </Link>
+                          
+                      </li>
+                      <li>
+                        <Link to="/access">
+                          <a className="p-ripple flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors w-full">
+                              <i className="pi pi-users mr-2"></i>
+                              <span className="font-medium">Team</span>
+                              <Ripple />
+                          </a>
+                        </Link>  
+                      </li>
+                      <li>
+                        <Link to="/demokc">
+                          <a className="p-ripple flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors w-full">
+                              <i className="pi pi-cog mr-2"></i>
+                              <span className="font-medium">Settings</span>
+                              <Ripple />
+                          </a>
+                        </Link>
+                      </li>
+                  </ul>
+              </li>
+            </ul>
+          </div>
         </aside>
       </div>
-      <main className="bg-slate-100 ml-48 p-4 h-screen max-w-full relative">
+      <main className="bg-slate-100 ml-48 p-3 h-screen max-w-full relative">
         <Outlet />
       </main>
 

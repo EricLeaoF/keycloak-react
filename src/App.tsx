@@ -4,6 +4,7 @@ import HomePage from './pages/HomePage';
 import AccessPage from './pages/Access';
 import DemoKc from './pages/DemoKc';
 import Layout from './layouts/mainLayout';
+import 'primeicons/primeicons.css';
 
 function App() {
   return (
