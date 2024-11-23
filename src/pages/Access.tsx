@@ -67,7 +67,7 @@ const AccessPage = () => {
     <div className='grid'>
       <Card className=''>
         <p style={{ wordBreak: 'break-all', color: 'black' }} id='infoPanel'>
-          Usuários
+          Users
         </p>
         <br></br>
         <TableContainer component={Paper}>
