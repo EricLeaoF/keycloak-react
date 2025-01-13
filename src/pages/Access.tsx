@@ -9,8 +9,10 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { httpClient } from '../HttpClient';
+import EditUser from '../components/EditUser';
 
 interface User {
+  id: string,
   firstName: string;
   lastName: string;
   username: string;
@@ -20,6 +22,8 @@ interface User {
 
 const AccessPage = () => {
   const [rows, setRows] = useState<User[]>([]);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [openEditModal, setOpenEditModal] = useState(false);
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: theme.palette.common.black,
@@ -67,6 +71,16 @@ const AccessPage = () => {
     return { name, calories, fat, carbs, protein };
   }
 
+  const handleRowClick = (user: User) => {
+    setSelectedUser(user);
+    setOpenEditModal(true);
+  }
+
+  const handleCloseModal = () => {
+    setSelectedUser(null);
+    setOpenEditModal(false);
+  }
+
   return (
     <div className='grid'>
       <Card className=''>
@@ -87,7 +101,7 @@ const AccessPage = () => {
             </TableHead>
             <TableBody>
               {rows.map((row) => (
-                <StyledTableRow key={row.firstName}>
+                <StyledTableRow onClick={() => handleRowClick(row)} key={row.firstName}>
                   <StyledTableCell component="th" scope="row">
                     {row.firstName}
                   </StyledTableCell>
@@ -101,6 +115,13 @@ const AccessPage = () => {
           </Table>
         </TableContainer>
       </Card>
+
+      { openEditModal && selectedUser && (
+        <EditUser
+          user={selectedUser}
+          onClose={handleCloseModal}
+        />
+      )}
   </div>
   )
 }
