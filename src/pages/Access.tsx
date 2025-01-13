@@ -48,13 +48,13 @@ const AccessPage = () => {
       try {
         const response = await httpClient.get('/users');
         console.log(response);
-        setRows(response.data); // Atualiza o estado com os dados
+        setRows(response.data);
       } catch (error) {
         console.error("Erro ao buscar usuários:", error);
       }
     };
     
-    fetchUsers(); // Chama a função para fazer a requisição
+    fetchUsers();
   }, []); 
 
   function createData(
