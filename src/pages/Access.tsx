@@ -27,7 +27,7 @@ const AccessPage = () => {
     },
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
-    },
+    }
   }));
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
     '&:nth-of-type(odd)': {
@@ -37,6 +37,10 @@ const AccessPage = () => {
     '&:last-child td, &:last-child th': {
       border: 0,
     },
+    '&:hover': {
+      backgroundColor: '#e0e0e0',
+      cursor: 'pointer'
+    }
   }));
 
   useEffect(() => {
