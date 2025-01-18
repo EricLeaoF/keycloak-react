@@ -8,8 +8,12 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button';
+import Alert from '@mui/material/Alert';
+import CircularProgress from '@mui/material/CircularProgress';
 import { httpClient } from '../HttpClient';
 import EditUser from '../components/EditUser';
+import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
 
 interface User {
   id: string,
@@ -24,6 +28,9 @@ const AccessPage = () => {
   const [rows, setRows] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [openEditModal, setOpenEditModal] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [open, setOpen] = useState(false);
+
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: theme.palette.common.black,
@@ -33,6 +40,7 @@ const AccessPage = () => {
       fontSize: 14,
     }
   }));
+
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
     '&:nth-of-type(odd)': {
       backgroundColor: theme.palette.action.hover,
@@ -48,28 +56,39 @@ const AccessPage = () => {
   }));
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await httpClient.get('/users');
-        console.log(response);
-        setRows(response.data);
-      } catch (error) {
-        console.error("Erro ao buscar usuários:", error);
-      }
-    };
-    
     fetchUsers();
-  }, []); 
+  }, []);
 
-  function createData(
-    name: string,
-    calories: number,
-    fat: number,
-    carbs: number,
-    protein: number,
-  ) {
-    return { name, calories, fat, carbs, protein };
-  }
+  const fetchUsers = async () => {
+    setLoading(true);
+    try {
+      const response = await httpClient.get('/users');
+      console.log(response);
+      setRows(response.data);
+    } catch (error) {
+      console.error("Erro ao buscar usuários:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSuccess = () => {
+    setOpen(true);
+    setSelectedUser(null);
+    setOpenEditModal(false);
+    fetchUsers();
+  };
+
+  const handleClose = (
+    event: React.SyntheticEvent | Event,
+    reason?: SnackbarCloseReason,
+  ) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   const handleRowClick = (user: User) => {
     setSelectedUser(user);
@@ -83,11 +102,26 @@ const AccessPage = () => {
 
   return (
     <div className='grid'>
-      <Card className=''>
+      <Snackbar
+        open={open}
+        autoHideDuration={5000}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      >
+        <Alert
+          onClose={handleClose}
+          severity="success"
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          Data saved successfully
+        </Alert>
+      </Snackbar>
+      <Card>
+        <Button variant="contained" style={{ display: 'flex', marginLeft: 'auto' }} >New user</Button>        
         <p style={{ wordBreak: 'break-all', color: 'black' }} id='infoPanel'>
           Users
         </p>
-        <br></br>
+        <br />
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 700 }} aria-label="customized table">
             <TableHead>
@@ -100,30 +134,35 @@ const AccessPage = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
-                <StyledTableRow onClick={() => handleRowClick(row)} key={row.firstName}>
-                  <StyledTableCell component="th" scope="row">
-                    {row.firstName}
-                  </StyledTableCell>
-                  <StyledTableCell align="left">{row.lastName}</StyledTableCell>
-                  <StyledTableCell align="left">{row.username}</StyledTableCell>
-                  <StyledTableCell align="left">{row.email}</StyledTableCell>
-                  <StyledTableCell align="left">{row.createdTimestamp}</StyledTableCell>
-                </StyledTableRow>
-              ))}
+              {loading ? (
+                <TableRow>
+                  <TableCell colSpan={5} style={{ textAlign: 'center' }}>
+                    <CircularProgress />
+                  </TableCell>
+                </TableRow>
+              ) : (
+                rows.map((row) => (
+                  <StyledTableRow onClick={() => handleRowClick(row)} key={row.firstName}>
+                    <StyledTableCell component="th" scope="row">
+                      {row.firstName}
+                    </StyledTableCell>
+                    <StyledTableCell align="left">{row.lastName}</StyledTableCell>
+                    <StyledTableCell align="left">{row.username}</StyledTableCell>
+                    <StyledTableCell align="left">{row.email}</StyledTableCell>
+                    <StyledTableCell align="left">{row.createdTimestamp}</StyledTableCell>
+                  </StyledTableRow>
+                ))
+              )}
             </TableBody>
           </Table>
         </TableContainer>
       </Card>
 
-      { openEditModal && selectedUser && (
-        <EditUser
-          user={selectedUser}
-          onClose={handleCloseModal}
-        />
+      {openEditModal && selectedUser && (
+        <EditUser user={selectedUser} onCloseSucess={handleSuccess} onCloseCancel={handleCloseModal} />
       )}
-  </div>
-  )
+    </div>
+  );
 }
 
-export default AccessPage
+export default AccessPage;

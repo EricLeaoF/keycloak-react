@@ -4,10 +4,11 @@ import { httpClient } from '../HttpClient';
 
 interface EditUserProps {
   user: { id: string, firstName: string; lastName: string; username: string; email: string; createdTimestamp: string };
-  onClose: () => void;
+  onCloseCancel: () => void;
+  onCloseSucess: () => void;
 }
 
-const EditUser: React.FC<EditUserProps> = ({ user, onClose }) => {
+const EditUser: React.FC<EditUserProps> = ({ user, onCloseCancel, onCloseSucess }) => {
   const [firstName, setFirstName] = useState(user.firstName);
   const [lastName, setLastName] = useState(user.lastName);
   const [email, setEmail] = useState(user.email);
@@ -20,13 +21,14 @@ const EditUser: React.FC<EditUserProps> = ({ user, onClose }) => {
         email
       });
       console.log(response);
+      onCloseSucess();
     } catch (error) {
       console.log(error);
     }
   }
 
   return (
-    <Dialog open onClose={onClose}>
+    <Dialog open onClose={onCloseCancel}>
       <DialogTitle>Edit User</DialogTitle>
       <DialogContent>
         <TextField
@@ -59,7 +61,7 @@ const EditUser: React.FC<EditUserProps> = ({ user, onClose }) => {
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="primary">
+        <Button onClick={onCloseCancel} color="primary">
           Cancel
         </Button>
         <Button onClick={save} color="primary">
