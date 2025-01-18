@@ -12,15 +12,18 @@ const CreateUser: React.FC<CreateUserProps> = ({ onCloseCancel, onCloseSucess })
   const [lastName, setLastName] = useState('');
   const [ username, setUsername] = useState('');
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const save = async () => {
     try {
-      // const response = await httpClient.put(`/users/${user.id}`, {
-      //   firstName,
-      //   lastName,
-      //   email
-      // });
-      // console.log(response);
+      const response = await httpClient.post(`/users`, {
+        firstName,
+        lastName,
+        username,
+        email,
+        password
+      });
+      console.log(response);
       onCloseSucess();
     } catch (error) {
       console.log(error);
@@ -62,6 +65,17 @@ const CreateUser: React.FC<CreateUserProps> = ({ onCloseCancel, onCloseSucess })
           value={email}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
             setEmail(event.target.value);
+          }}
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          label="Password"
+          value={password}
+          type="password"
+          autoComplete="current-password"
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+            setPassword(event.target.value);
           }}
           fullWidth
           margin="normal"
