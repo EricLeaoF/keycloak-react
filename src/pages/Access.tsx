@@ -13,6 +13,7 @@ import Alert from '@mui/material/Alert';
 import CircularProgress from '@mui/material/CircularProgress';
 import { httpClient } from '../HttpClient';
 import EditUser from '../components/EditUser';
+import CreateUser from '../components/CreateUser';
 import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
 
 interface User {
@@ -28,6 +29,7 @@ const AccessPage = () => {
   const [rows, setRows] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [openEditModal, setOpenEditModal] = useState(false);
+  const [openCreateUserModal, setOpenCreateUserModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
 
@@ -72,10 +74,16 @@ const AccessPage = () => {
     }
   };
 
-  const handleSuccess = () => {
+  const handleSuccessEdit = () => {
     setOpen(true);
     setSelectedUser(null);
     setOpenEditModal(false);
+    fetchUsers();
+  };
+
+  const handleSuccessCreate = () => {
+    setOpen(true);
+    setOpenCreateUserModal(false);
     fetchUsers();
   };
 
@@ -95,9 +103,17 @@ const AccessPage = () => {
     setOpenEditModal(true);
   }
 
-  const handleCloseModal = () => {
+  const handleCloseModalEdit = () => {
     setSelectedUser(null);
     setOpenEditModal(false);
+  }
+
+  const handleCloseModalCreate = () => {
+    setOpenCreateUserModal(false);
+  }
+
+  const handleClickNewUser = () => {
+    setOpenCreateUserModal(true);
   }
 
   return (
@@ -117,7 +133,7 @@ const AccessPage = () => {
         </Alert>
       </Snackbar>
       <Card>
-        <Button variant="contained" style={{ display: 'flex', marginLeft: 'auto' }} >New user</Button>        
+        <Button variant="contained" style={{ display: 'flex', marginLeft: 'auto' }} onClick={() => handleClickNewUser()} >New user</Button>        
         <p style={{ wordBreak: 'break-all', color: 'black' }} id='infoPanel'>
           Users
         </p>
@@ -142,7 +158,7 @@ const AccessPage = () => {
                 </TableRow>
               ) : (
                 rows.map((row) => (
-                  <StyledTableRow onClick={() => handleRowClick(row)} key={row.firstName}>
+                  <StyledTableRow onClick={() => handleRowClick(row)} key={row.username}>
                     <StyledTableCell component="th" scope="row">
                       {row.firstName}
                     </StyledTableCell>
@@ -159,7 +175,11 @@ const AccessPage = () => {
       </Card>
 
       {openEditModal && selectedUser && (
-        <EditUser user={selectedUser} onCloseSucess={handleSuccess} onCloseCancel={handleCloseModal} />
+        <EditUser user={selectedUser} onCloseSucess={handleSuccessEdit} onCloseCancel={handleCloseModalEdit} />
+      )}
+
+      {openCreateUserModal && (
+        <CreateUser onCloseSucess={handleSuccessCreate} onCloseCancel={handleCloseModalCreate}></CreateUser>
       )}
     </div>
   );
